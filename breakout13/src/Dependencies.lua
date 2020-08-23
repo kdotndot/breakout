@@ -35,6 +35,9 @@ require 'src/StateMachine'
 -- of differing sizes for paddles, balls, bricks, etc.
 require 'src/Util'
 
+--powerUp object that spawns when a certain time is elapsed or a block is hit enough
+require 'src/PowerUp'
+
 -- each of the individual states our game can be in at once; each state has
 -- its own update and render methods that can be called by our state machine
 -- each frame, to avoid bulky code in main.lua
