@@ -28,7 +28,9 @@ function PlayState:enter(params)
     self.highScores = params.highScores
     self.ball = params.ball
     self.level = params.level
-
+    self.count = 2
+    self.timer = 0
+    self.powerIN = false
     self.recoverPoints = 5000
 
     -- give ball random starting velocity
@@ -37,6 +39,7 @@ function PlayState:enter(params)
 end
 
 function PlayState:update(dt)
+    self.timer = self.timer + dt
     if self.paused then
         if love.keyboard.wasPressed('space') then
             self.paused = false
@@ -53,6 +56,28 @@ function PlayState:update(dt)
     -- update positions based on velocity
     self.paddle:update(dt)
     self.ball:update(dt)
+    
+    if self.powerIN == true then
+        p1:update(dt)
+
+    end
+
+    if self.timer > COUNTDOWN_TIME then
+        self.timer = self.timer % COUNTDOWN_TIME
+        self.count = self.count - 1
+
+        if self.count == 0 then
+            self.powerIN = true
+            p1 = powerUp:new(50,50)
+        end
+
+    end
+
+            
+
+
+
+
 
     if self.ball:collides(self.paddle) then
         -- raise ball above paddle in case it goes below it, then reverse dy
