@@ -20,6 +20,8 @@ PlayState = Class{__includes = BaseState}
     We initialize what's in our PlayState via a state table that we pass between
     states as we go from playing to serving.
 ]]
+
+
 function PlayState:enter(params)
     self.paddle = params.paddle
     self.bricks = params.bricks
@@ -28,9 +30,11 @@ function PlayState:enter(params)
     self.highScores = params.highScores
     self.ball = params.ball
     self.level = params.level
+    
+    self.powerUps = {}
     self.count = 2
     self.timer = 0
-    self.powerIN = false
+    
     self.recoverPoints = 5000
 
     -- give ball random starting velocity
@@ -68,7 +72,9 @@ function PlayState:update(dt)
 
         if self.count == 0 then
             self.powerIN = true
-            p1 = powerUp:new(50,50)
+            p1 = PowerUp(math.random(100, 1280-16),50)
+            table.insert(self.powerUps, p1)
+            self.count = 2
         end
 
     end
@@ -223,6 +229,12 @@ function PlayState:update(dt)
 end
 
 function PlayState:render()
+    --render powerUps
+        for k, PowerUp in pairs(self.powerUps) do
+            PowerUp:render()
+        end
+    
+    
     -- render bricks
     for k, brick in pairs(self.bricks) do
         brick:render()

@@ -9,7 +9,7 @@
 ]]
 PowerUp = Class{}
 
-POWERUP_GRAVITY = 100
+POWERUP_GRAVITY = 1
 
 function PowerUp:init(x,y)
     self.x = x
