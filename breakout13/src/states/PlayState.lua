@@ -35,6 +35,8 @@ function PlayState:enter(params)
     self.count = 2
     self.timer = 0
     
+    self.balls = {}
+
     self.recoverPoints = 5000
 
     -- give ball random starting velocity
@@ -57,15 +59,51 @@ function PlayState:update(dt)
         return
     end
 
+    --adds original ball to balls list
+    table.insert(self.balls, self.ball)
+
     -- update positions based on velocity
     self.paddle:update(dt)
-    self.ball:update(dt)
     
+    --self.ball:update(dt)
+
+    for k, ball in pairs(self.bonusb) do
+        ball:update(dt)
+    end
+    
+    --update powerups
     if self.powerIN == true then
         p1:update(dt)
 
     end
+    
+    --add bonus 2 balls if collides
+    for k, pups in pairs(self.powerUps) do
+        if pups:collides(self.paddle) then
+            table.remove(self.powerUps, k)
+            for i=1, 2 do
+                b1 = Ball()
+                b1.skin = math.random(7)
+                b1.x = self.paddle.x + (self.paddle.width / 2) - 4
+                b1.y = self.paddle.y - 8
+                b1.dx = math.random(-200, 200)
+                b1.dy = math.random(-50, -60)
+                table.insert(self.bonusb, b1)
+            end
 
+        end
+    end
+
+
+
+    --remove powerups if past screen
+    for k, pups in pairs(self.powerUps) do
+        if pups.y > VIRTUAL_HEIGHT then
+            table.remove(self.powerUps, k)
+        end
+    end
+
+    --create random x coord power ups every set amoutn of time
     if self.timer > COUNTDOWN_TIME then
         self.timer = self.timer % COUNTDOWN_TIME
         self.count = self.count - 1
@@ -79,13 +117,14 @@ function PlayState:update(dt)
 
     end
 
+
             
 
 
 
 
-
-    if self.ball:collides(self.paddle) then
+for k, ball in pairs(self.balls) do
+    if ball:collides(self.paddle) then
         -- raise ball above paddle in case it goes below it, then reverse dy
         self.ball.y = self.paddle.y - 8
         self.ball.dy = -self.ball.dy
@@ -230,11 +269,17 @@ end
 
 function PlayState:render()
     --render powerUps
-        for k, PowerUp in pairs(self.powerUps) do
+    for k, PowerUp in pairs(self.powerUps) do
             PowerUp:render()
-        end
+    end
     
-    
+    --render bonus balls
+    for k, ball in pairs(self.bonusb) do
+        ball:render(dt)
+    end    
+
+
+
     -- render bricks
     for k, brick in pairs(self.bricks) do
         brick:render()
