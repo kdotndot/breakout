@@ -1,12 +1,9 @@
 --[[
     GD50
     Breakout Remake
-
     -- PlayState Class --
-
     Author: Colton Ogden
     cogden@cs50.harvard.edu
-
     Represents the state of the game in which we are actively playing;
     player should control the paddle, with the ball actively bouncing between
     the bricks, walls, and the paddle. If the ball goes below the paddle, then
@@ -35,7 +32,7 @@ function PlayState:enter(params)
     self.count = 2
     self.timer = 0
     
-    self.balls = {}
+    self.bonusb = {}
 
     self.recoverPoints = 5000
 
@@ -60,14 +57,14 @@ function PlayState:update(dt)
     end
 
     --adds original ball to balls list
-    table.insert(self.balls, self.ball)
+    --table.insert(self.balls, self.ball)
 
     -- update positions based on velocity
     self.paddle:update(dt)
     
-    --self.ball:update(dt)
+    self.ball:update(dt)
 
-    for k, ball in pairs(self.balls) do
+    for k, ball in pairs(self.bonusb) do
         ball:update(dt)
     end
     
@@ -123,27 +120,26 @@ function PlayState:update(dt)
 
 
 
-    for k, ball in pairs(self.balls) do
-        if ball:collides(self.paddle) then
-            -- raise ball above paddle in case it goes below it, then reverse dy
-            self.ball.y = self.paddle.y - 8
-            self.ball.dy = -self.ball.dy
 
-            --
-            -- tweak angle of bounce based on where it hits the paddle
-            --
+    if self.ball:collides(self.paddle) then
+        -- raise ball above paddle in case it goes below it, then reverse dy
+        self.ball.y = self.paddle.y - 8
+        self.ball.dy = -self.ball.dy
 
-            -- if we hit the paddle on its left side while moving left...
-            if self.ball.x < self.paddle.x + (self.paddle.width / 2) and self.paddle.dx < 0 then
-                self.ball.dx = -50 + -(8 * (self.paddle.x + self.paddle.width / 2 - self.ball.x))
-            
-            -- else if we hit the paddle on its right side while moving right...
-            elseif self.ball.x > self.paddle.x + (self.paddle.width / 2) and self.paddle.dx > 0 then
-                self.ball.dx = 50 + (8 * math.abs(self.paddle.x + self.paddle.width / 2 - self.ball.x))
-            end
+        --
+        -- tweak angle of bounce based on where it hits the paddle
+        --
 
-            gSounds['paddle-hit']:play()
+        -- if we hit the paddle on its left side while moving left...
+        if self.ball.x < self.paddle.x + (self.paddle.width / 2) and self.paddle.dx < 0 then
+            self.ball.dx = -50 + -(8 * (self.paddle.x + self.paddle.width / 2 - self.ball.x))
+        
+        -- else if we hit the paddle on its right side while moving right...
+        elseif self.ball.x > self.paddle.x + (self.paddle.width / 2) and self.paddle.dx > 0 then
+            self.ball.dx = 50 + (8 * math.abs(self.paddle.x + self.paddle.width / 2 - self.ball.x))
         end
+
+        gSounds['paddle-hit']:play()
     end
 
     -- detect collision across all bricks with the ball
@@ -275,7 +271,7 @@ function PlayState:render()
     end
     
     --render bonus balls
-    for k, ball in pairs(self.balls) do
+    for k, ball in pairs(self.bonusb) do
         ball:render(dt)
     end    
 
