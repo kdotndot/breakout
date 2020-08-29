@@ -67,7 +67,7 @@ function PlayState:update(dt)
     
     --self.ball:update(dt)
 
-    for k, ball in pairs(self.bonusb) do
+    for k, ball in pairs(self.balls) do
         ball:update(dt)
     end
     
@@ -123,26 +123,27 @@ function PlayState:update(dt)
 
 
 
-for k, ball in pairs(self.balls) do
-    if ball:collides(self.paddle) then
-        -- raise ball above paddle in case it goes below it, then reverse dy
-        self.ball.y = self.paddle.y - 8
-        self.ball.dy = -self.ball.dy
+    for k, ball in pairs(self.balls) do
+        if ball:collides(self.paddle) then
+            -- raise ball above paddle in case it goes below it, then reverse dy
+            self.ball.y = self.paddle.y - 8
+            self.ball.dy = -self.ball.dy
 
-        --
-        -- tweak angle of bounce based on where it hits the paddle
-        --
+            --
+            -- tweak angle of bounce based on where it hits the paddle
+            --
 
-        -- if we hit the paddle on its left side while moving left...
-        if self.ball.x < self.paddle.x + (self.paddle.width / 2) and self.paddle.dx < 0 then
-            self.ball.dx = -50 + -(8 * (self.paddle.x + self.paddle.width / 2 - self.ball.x))
-        
-        -- else if we hit the paddle on its right side while moving right...
-        elseif self.ball.x > self.paddle.x + (self.paddle.width / 2) and self.paddle.dx > 0 then
-            self.ball.dx = 50 + (8 * math.abs(self.paddle.x + self.paddle.width / 2 - self.ball.x))
+            -- if we hit the paddle on its left side while moving left...
+            if self.ball.x < self.paddle.x + (self.paddle.width / 2) and self.paddle.dx < 0 then
+                self.ball.dx = -50 + -(8 * (self.paddle.x + self.paddle.width / 2 - self.ball.x))
+            
+            -- else if we hit the paddle on its right side while moving right...
+            elseif self.ball.x > self.paddle.x + (self.paddle.width / 2) and self.paddle.dx > 0 then
+                self.ball.dx = 50 + (8 * math.abs(self.paddle.x + self.paddle.width / 2 - self.ball.x))
+            end
+
+            gSounds['paddle-hit']:play()
         end
-
-        gSounds['paddle-hit']:play()
     end
 
     -- detect collision across all bricks with the ball
@@ -274,7 +275,7 @@ function PlayState:render()
     end
     
     --render bonus balls
-    for k, ball in pairs(self.bonusb) do
+    for k, ball in pairs(self.balls) do
         ball:render(dt)
     end    
 
