@@ -35,6 +35,8 @@ function PlayState:enter(params)
     self.bonusb = {}
 
     self.recoverPoints = 5000
+    self.plus10k = false
+    self.plus20k = false
 
     --give ball random starting velocity
     self.ball.dx = math.random(-200, 200)
@@ -174,6 +176,11 @@ function PlayState:update(dt)
                     gSounds['recover']:play()
                 end
 
+                if self.plus5k == false  then
+                    self.paddle.increaseSize()
+                end
+                if 
+
                 -- go to our victory screen if there are no more bricks left
                 if self:checkVictory() then
                     gSounds['victory']:play()
@@ -238,6 +245,12 @@ function PlayState:update(dt)
                 break
             end
         end
+
+
+
+
+
+
     end
 
 
