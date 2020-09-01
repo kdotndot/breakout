@@ -263,6 +263,7 @@ function loadHighScores()
     return scores
 end
 
+
 --[[
     Renders hearts based on how much health the player has. First renders
     full hearts, then empty hearts for however much health we're missing.
@@ -298,6 +299,7 @@ end
     Simply renders the player's score at the top right, with left-side padding
     for the score number.
 ]]
+
 function renderScore(score)
     love.graphics.setFont(gFonts['small'])
     love.graphics.print('Score:', VIRTUAL_WIDTH - 60, 5)

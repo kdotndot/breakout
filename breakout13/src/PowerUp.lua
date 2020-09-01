@@ -28,7 +28,7 @@ end
 
 
 function PowerUp:render()
-    love.graphics.draw(gTextures['main'], gFrames['powerUps'][1], self.x, self.y)
+    love.graphics.draw(gTextures['main'], gFrames['powerUps'][7], self.x, self.y)
 
 
 end
